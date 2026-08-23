@@ -1,0 +1,349 @@
+// Prisma Schema for Credora Career Opportunity Research & Decision-Support Platform
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String               @id @default(uuid())
+  email            String               @unique
+  passwordHash     String
+  name             String
+  role             String               @default("STUDENT") // STUDENT, ADMIN
+  avatarUrl        String?
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+
+  profile          CandidateProfile?
+  preferences      UserPreference?
+  messages         OpportunityMessage[]
+  savedReports     SavedReport[]
+  searchHistories  SearchHistory[]
+  comparisons      Comparison[]
+  recommendations  Recommendation[]
+}
+
+model CandidateProfile {
+  id                  String    @id @default(uuid())
+  userId              String    @unique
+  education           String?   // e.g. "B.Tech Computer Science & Engineering"
+  degree              String?   // e.g. "B.Tech"
+  department          String?   // e.g. "Computer Science & Engineering"
+  college             String?   // e.g. "National Institute of Technology"
+  graduationYear      Int?      // e.g. 2026
+  skills              String    @default("[]") // JSON string array of skills
+  interests           String    @default("[]") // JSON string array of interest areas
+  careerGoal          String?   // e.g. "Full-Stack Software Engineer & Distributed Systems"
+  preferredRoles      String    @default("[]") // JSON string array
+  preferredIndustries String    @default("[]") // JSON string array
+  preferredLocations  String    @default("[]") // JSON string array
+  workMode            String?   @default("ANY") // REMOTE, HYBRID, ONSITE, ANY
+  experienceLevel     String?   @default("ENTRY_LEVEL") // FRESHER, INTERN, ENTRY_LEVEL, JUNIOR
+  bio                 String?
+  onboardingCompleted Boolean   @default(false)
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserPreference {
+  id                  String    @id @default(uuid())
+  userId              String    @unique
+  theme               String    @default("DARK") // DARK, LIGHT, SYSTEM
+  emailAlerts         Boolean   @default(true)
+  riskWarningAlerts   Boolean   @default(true)
+  minCredibilityScore Int       @default(60)
+  autoCompareSaved    Boolean   @default(true)
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Company {
+  id                 String               @id @default(uuid())
+  name               String
+  slug               String               @unique
+  officialWebsite    String?
+  officialDomain     String?
+  industry           String?
+  description        String?
+  foundedYear        Int?
+  headquarters       String?
+  locations          String               @default("[]") // JSON string array
+  companySize        String?              // e.g. "500-1,000 employees"
+  registrationNumber String?              // CIN/LLP/EIN
+  registrationStatus String?              // "ACTIVE", "VERIFIED_REGISTRY", "UNVERIFIED"
+  businessType       String?              // "Private Limited", "LLP", "Public Listed"
+  publicPresence     String?              // summary of online visibility
+  productsServices   String               @default("[]") // JSON string array
+  socialProfiles     String               @default("{}") // JSON object { linkedin, github, twitter }
+  ratingGlassdoor    Float?
+  ratingAmbitionBox  Float?
+  sslStatus          String?              @default("VERIFIED") // VERIFIED, INVALID, UNVERIFIED
+  domainAgeYears     Int?
+  credibilityScore   Int                  @default(75)
+  isDemo             Boolean              @default(false)
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+
+  opportunities      Opportunity[]
+  contacts           Contact[]
+  sources            Source[]
+  credibilityReports CredibilityAssessment[]
+  researchReports    ResearchReport[]
+}
+
+model Opportunity {
+  id                  String               @id @default(uuid())
+  companyId           String
+  title               String
+  slug                String               @unique
+  opportunityType     String               @default("INTERNSHIP") // INTERNSHIP, FULL_TIME_JOB, ONLINE_COURSE, TRAINING_PROGRAM
+  role                String?
+  description         String?
+  eligibility         String?
+  requiredSkills      String               @default("[]") // JSON string array
+  preferredSkills     String               @default("[]") // JSON string array
+  duration            String?              // e.g. "6 Months", "Full Time"
+  location            String?              // e.g. "Bangalore / Hybrid", "Remote"
+  workMode            String               @default("HYBRID") // REMOTE, HYBRID, ONSITE
+  stipend             String?              // e.g. "₹25,000 / month"
+  salary              String?              // e.g. "₹8,00,000 - ₹12,00,000 PA"
+  fee                 String?              // e.g. "None / ₹0", "₹1,500 Registration Fee"
+  hasUpfrontFee       Boolean              @default(false)
+  deadline            String?
+  applicationUrl      String?
+  applicationMethod   String?              // e.g. "Official Portal", "Email", "Google Form"
+  postedDate          DateTime?            @default(now())
+  statusVerification  String               @default("VERIFIED") // VERIFIED, UNVERIFIED, MISSING_DETAILS, OUTDATED, CONFLICTING
+  careerRelevanceScore Int                 @default(80)
+  learningPotentialScore Int               @default(85)
+  isDemo              Boolean              @default(false)
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+
+  company             Company              @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  credibilityReports  CredibilityAssessment[]
+  researchReports     ResearchReport[]
+  comparisonItems     ComparisonOpportunity[]
+  recommendations     Recommendation[]
+}
+
+model OpportunityMessage {
+  id                 String               @id @default(uuid())
+  userId             String?
+  rawText            String
+  extractedCompany   String?
+  extractedRole      String?
+  extractedType      String?              // INTERNSHIP, JOB, COURSE
+  extractedSalary    String?
+  extractedStipend   String?
+  extractedFee       String?
+  extractedDuration  String?
+  extractedLocation  String?
+  extractedDeadline  String?
+  extractedRecruiter String?
+  extractedEmail     String?
+  extractedPhone     String?
+  extractedUrls      String               @default("[]") // JSON array
+  extractedSkills    String               @default("[]") // JSON array
+  extractedEligibility String?
+  extractedClaims    String               @default("[]") // JSON array
+
+  riskLevel          String               @default("LOW_RISK") // LOW_RISK, MODERATE_RISK, HIGH_RISK, INSUFFICIENT_INFORMATION
+  riskScore          Int                  @default(20) // 0 - 100 (higher = riskier)
+  detectedIndicators String               @default("[]") // JSON array of detected warning triggers
+  riskReasoning      String?
+  positiveSignals    String               @default("[]") // JSON array
+  recommendations    String               @default("[]") // JSON array
+  isDemo             Boolean              @default(false)
+  createdAt          DateTime             @default(now())
+
+  user               User?                @relation(fields: [userId], references: [id], onDelete: SetNull)
+}
+
+model CredibilityAssessment {
+  id                           String       @id @default(uuid())
+  companyId                    String
+  opportunityId                String?
+  overallScore                 Int          @default(75) // 0 - 100
+  overallStatus                String       // "High Confidence", "Moderate Confidence", "Needs Additional Verification", "Caution Recommended"
+
+  // 8 Dimensions (0-100 each)
+  scoreCompanyExistence        Int          @default(75)
+  scoreWebsiteCredibility      Int          @default(75)
+  scoreCompanyHistory          Int          @default(75)
+  scorePublicPresence          Int          @default(75)
+  scoreContactVerification     Int          @default(75)
+  scoreOpportunityConsistency  Int          @default(75)
+  scoreInfoCompleteness        Int          @default(75)
+  scoreRiskIndicators          Int          @default(75)
+
+  // Reasonings for each of 8 dimensions
+  reasonExistence              String?
+  reasonWebsite                String?
+  reasonHistory                String?
+  reasonPublicPresence         String?
+  reasonContact                String?
+  reasonConsistency            String?
+  reasonCompleteness           String?
+  reasonRisk                   String?
+
+  positiveSignals              String       @default("[]") // JSON array string
+  warningSignals               String       @default("[]") // JSON array string
+  unverifiedInformation        String       @default("[]") // JSON array string
+  conflictingInformation       String       @default("[]") // JSON array string
+  narrativeExplanation         String?
+  isDemo                       Boolean      @default(false)
+  createdAt                    DateTime     @default(now())
+
+  company                      Company      @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  opportunity                  Opportunity? @relation(fields: [opportunityId], references: [id], onDelete: SetNull)
+  reports                      ResearchReport[]
+}
+
+model ResearchReport {
+  id                           String                 @id @default(uuid())
+  companyId                    String
+  opportunityId                String?
+  credibilityAssessmentId      String?
+  title                        String
+  summary                      String
+  careerMatchPercentage        Int                    @default(85)
+  credibilityScore             Int                    @default(80)
+  infoQualityScore             Int                    @default(90)
+  riskLevel                    String                 @default("LOW_RISK") // LOW_RISK, MODERATE_RISK, HIGH_RISK, INSUFFICIENT_INFORMATION
+
+  executiveSummary             String?
+  companyOverview              String?
+  opportunityOverview          String?
+  careerRelevance              String?
+  riskIndicatorsSummary        String?
+  informationGaps              String                 @default("[]") // JSON array
+  sourceSummary                String?
+  contactSummary               String?
+  recommendationNarrative      String?
+  lastChecked                  DateTime               @default(now())
+  isDemo                       Boolean                @default(false)
+  createdAt                    DateTime               @default(now())
+  updatedAt                    DateTime               @updatedAt
+
+  company                      Company                @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  opportunity                  Opportunity?           @relation(fields: [opportunityId], references: [id], onDelete: SetNull)
+  credibilityAssessment        CredibilityAssessment? @relation(fields: [credibilityAssessmentId], references: [id], onDelete: SetNull)
+  savedReports                 SavedReport[]
+}
+
+model Source {
+  id                 String       @id @default(uuid())
+  companyId          String
+  sourceName         String       // e.g. "MCA Corporate Affairs Directory", "Official Domain WHOIS", "LinkedIn Profile"
+  sourceType         String       // REGISTRY, WHOIS, WEBSITE, LINKEDIN, REPUTATION_INDEX, DIRECTORY
+  sourceUrl          String?
+  attributeKey       String       // e.g. "Founded Year", "Headquarters Address", "Registration CIN"
+  attributeValue     String
+  confidenceLevel    String       @default("HIGH") // HIGH, MEDIUM, LOW
+  verificationStatus String       @default("VERIFIED") // VERIFIED, POSSIBLY_OUTDATED, INCOMPLETE, CONFLICTING, NOT_VERIFIED
+  lastCheckedDate    DateTime     @default(now())
+  notes              String?
+  createdAt          DateTime     @default(now())
+
+  company            Company      @relation(fields: [companyId], references: [id], onDelete: Cascade)
+}
+
+model Contact {
+  id                 String       @id @default(uuid())
+  companyId          String
+  contactType        String       // OFFICIAL_EMAIL, HR_EMAIL, SUPPORT_EMAIL, HEADQUARTERS_PHONE, OFFICE_PHONE, LINKEDIN_PAGE, CAREERS_PORTAL
+  contactValue       String
+  label              String?      // e.g. "Global Talent Acquisition Desk", "Registrar Headquarters"
+  sourceName         String       // e.g. "Official Careers Page", "MCA Ministry Records"
+  sourceUrl          String?
+  verificationStatus String       @default("VERIFIED") // VERIFIED, UNVERIFIED, POSSIBLY_OUTDATED, CONFLICTING
+  lastChecked        DateTime     @default(now())
+  createdAt          DateTime     @default(now())
+
+  company            Company      @relation(fields: [companyId], references: [id], onDelete: Cascade)
+}
+
+model Comparison {
+  id                  String                  @id @default(uuid())
+  userId              String
+  title               String                  @default("Opportunity Comparison")
+  topRecommendationId String?
+  recommendationWhy   String?
+  weightedMetrics     String                  @default("{}") // JSON object { careerFitWeight, credibilityWeight, riskWeight, learningWeight }
+  createdAt           DateTime                @default(now())
+  updatedAt           DateTime                @updatedAt
+
+  user                User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  opportunities       ComparisonOpportunity[]
+}
+
+model ComparisonOpportunity {
+  id                  String       @id @default(uuid())
+  comparisonId        String
+  opportunityId       String
+  suitabilityScore    Int          @default(85) // Weighted aggregate score 0 - 100
+  careerFitScore      Int          @default(85)
+  skillMatchScore     Int          @default(80)
+  credibilityScore    Int          @default(80)
+  learningScore       Int          @default(85)
+  riskIndex           String       @default("LOW_RISK")
+  infoQualityScore    Int          @default(90)
+  pros                String       @default("[]") // JSON array string
+  cons                String       @default("[]") // JSON array string
+  fitExplanation      String?
+  ranking             Int          @default(1)
+
+  comparison          Comparison   @relation(fields: [comparisonId], references: [id], onDelete: Cascade)
+  opportunity         Opportunity  @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+}
+
+model SavedReport {
+  id                  String         @id @default(uuid())
+  userId              String
+  researchReportId    String
+  notes               String?
+  isPinned            Boolean        @default(false)
+  createdAt           DateTime       @default(now())
+
+  user                User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  report              ResearchReport @relation(fields: [researchReportId], references: [id], onDelete: Cascade)
+}
+
+model SearchHistory {
+  id             String    @id @default(uuid())
+  userId         String
+  searchQuery    String
+  inputType      String    @default("COMPANY_NAME") // COMPANY_NAME, WEBSITE_URL, OPPORTUNITY_URL, MESSAGE_TEXT
+  targetType     String?   // COMPANY, OPPORTUNITY, MESSAGE, GENERAL
+  resultId       String?
+  resultTitle    String?
+  createdAt      DateTime  @default(now())
+
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Recommendation {
+  id                  String       @id @default(uuid())
+  userId              String
+  opportunityId       String
+  matchPercentage     Int          @default(88)
+  matchReason         String
+  matchedSkills       String       @default("[]") // JSON array
+  careerFitCategory   String       @default("HIGH_ALIGNMENT") // HIGH_ALIGNMENT, MODERATE_ALIGNMENT, EXPLORATORY
+  credibilityScore    Int          @default(80)
+  riskLevel           String       @default("LOW_RISK")
+  createdAt           DateTime     @default(now())
+
+  user                User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  opportunity         Opportunity  @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+}

@@ -1,0 +1,255 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  body {
+    @apply antialiased font-sans transition-colors duration-200;
+  }
+
+  /* Light mode defaults (Warm Heritage Cream + Sharp Contrast Charcoal Text) */
+  html:not(.dark) {
+    color-scheme: light !important;
+    background-color: #E8DAC2;
+    color: #0A110D;
+  }
+
+  html:not(.dark) body {
+    background-color: #E8DAC2;
+    color: #0A110D;
+  }
+
+  /* Dark mode defaults */
+  html.dark {
+    color-scheme: dark !important;
+    background-color: #0F1511;
+    color: #E2EDE2;
+  }
+
+  html.dark body {
+    background-color: #0F1511;
+    color: #E2EDE2;
+  }
+
+  /* Universal Input / Textarea / Select Theme (Warm Parchment #F7EFE1, NOT pure white) */
+  html:not(.dark) input,
+  html:not(.dark) textarea,
+  html:not(.dark) select {
+    background-color: #F7EFE1 !important;
+    color: #0A110D !important;
+    border-color: #BAA88B !important;
+    -webkit-appearance: none;
+  }
+
+  html:not(.dark) input:focus,
+  html:not(.dark) textarea:focus,
+  html:not(.dark) select:focus {
+    background-color: #FAF4EA !important;
+    border-color: #0D2B1D !important;
+    outline: none !important;
+    box-shadow: 0 0 0 2.5px rgba(13, 43, 29, 0.22) !important;
+  }
+
+  html:not(.dark) input::placeholder,
+  html:not(.dark) textarea::placeholder {
+    color: #4A5F52 !important;
+  }
+
+  html.dark input,
+  html.dark textarea,
+  html.dark select {
+    background-color: #1A251E !important;
+    color: #E2EDE2 !important;
+    border-color: #334438 !important;
+  }
+
+  html.dark input:focus,
+  html.dark textarea:focus,
+  html.dark select:focus {
+    background-color: #202D25 !important;
+    border-color: #4EA36C !important;
+    outline: none !important;
+    box-shadow: 0 0 0 2.5px rgba(78, 163, 108, 0.30) !important;
+  }
+
+  html.dark input::placeholder,
+  html.dark textarea::placeholder {
+    color: #7D9281 !important;
+  }
+}
+
+/* Editorial Research Publication Card Utilities */
+@layer components {
+  .editorial-card {
+    @apply transition-all duration-200;
+  }
+
+  /* Light Theme Editorial Card (Warm Parchment #F7EFE1, lighter than cream, NOT pure white) */
+  html:not(.dark) .editorial-card {
+    background-color: #F7EFE1;
+    border: 1.5px solid #BAA88B;
+    color: #0A110D;
+    box-shadow: 0 1px 4px -1px rgba(13, 43, 29, 0.07), 0 4px 14px -2px rgba(13, 43, 29, 0.05);
+  }
+
+  html:not(.dark) .editorial-card:hover {
+    border-color: #0D2B1D;
+    box-shadow: 0 4px 18px -2px rgba(13, 43, 29, 0.12);
+  }
+
+  /* Dark Theme Editorial Card */
+  html.dark .editorial-card {
+    background-color: #202D25;
+    border: 1.5px solid #334438;
+    color: #E2EDE2;
+    box-shadow: 0 4px 14px -2px rgba(0, 0, 0, 0.35);
+  }
+
+  html.dark .editorial-card:hover {
+    border-color: #4EA36C;
+    box-shadow: 0 6px 20px -3px rgba(0, 0, 0, 0.45);
+  }
+
+  /* Editorial Header Pill */
+  .editorial-pill {
+    @apply inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-extrabold tracking-wide transition-all;
+  }
+
+  html:not(.dark) .editorial-pill {
+    background-color: #D8C7AC;
+    color: #0D2B1D;
+    border: 1.5px solid #BAA88B;
+  }
+
+  html.dark .editorial-pill {
+    background-color: #1A251E;
+    color: #4EA36C;
+    border: 1px solid #334438;
+  }
+
+  /* Primary Button (Dark Forest Green + Warm Parchment Text) */
+  .btn-primary {
+    @apply px-5 py-2.5 rounded-xl font-sans font-extrabold text-xs tracking-wide transition-all duration-150 flex items-center justify-center gap-2;
+  }
+
+  html:not(.dark) .btn-primary {
+    background-color: #0D2B1D;
+    color: #F7EFE1;
+    box-shadow: 0 2px 8px rgba(13, 43, 29, 0.22);
+  }
+
+  html:not(.dark) .btn-primary:hover {
+    background-color: #164630;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(13, 43, 29, 0.30);
+  }
+
+  html.dark .btn-primary {
+    background-color: #4EA36C;
+    color: #0F1511;
+    box-shadow: 0 2px 8px rgba(78, 163, 108, 0.25);
+  }
+
+  html.dark .btn-primary:hover {
+    background-color: #62B780;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(78, 163, 108, 0.35);
+  }
+
+  /* Secondary Button */
+  .btn-secondary {
+    @apply px-5 py-2.5 rounded-xl font-sans font-bold text-xs tracking-wide transition-all duration-150 flex items-center justify-center gap-2;
+  }
+
+  html:not(.dark) .btn-secondary {
+    background-color: #F7EFE1;
+    color: #0D2B1D;
+    border: 1.5px solid #BAA88B;
+  }
+
+  html:not(.dark) .btn-secondary:hover {
+    background-color: #D8C7AC;
+    border-color: #0D2B1D;
+  }
+
+  html.dark .btn-secondary {
+    background-color: #1A251E;
+    color: #E2EDE2;
+    border: 1.5px solid #334438;
+  }
+
+  html.dark .btn-secondary:hover {
+    background-color: #202D25;
+    border-color: #4EA36C;
+  }
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+html:not(.dark) ::-webkit-scrollbar-track {
+  background: #DFCFB6;
+}
+
+html:not(.dark) ::-webkit-scrollbar-thumb {
+  background: #A89578;
+  border-radius: 4px;
+}
+
+html:not(.dark) ::-webkit-scrollbar-thumb:hover {
+  background: #0D2B1D;
+}
+
+html.dark ::-webkit-scrollbar-track {
+  background: #141D17;
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+  background: #334438;
+  border-radius: 4px;
+}
+
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: #4EA36C;
+}
+
+/* Smooth Subtle Animations */
+@keyframes bounceSlow {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.animate-bounce-slow {
+  animation: bounceSlow 4s ease-in-out infinite;
+}
+
+/* Print Stylesheet for 1-Click PDF Report Export */
+@media print {
+  body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  .no-print, nav, footer, aside, button, .btn-primary, .btn-secondary {
+    display: none !important;
+  }
+
+  .editorial-card {
+    border: 1px solid #cccccc !important;
+    box-shadow: none !important;
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    break-inside: avoid;
+  }
+}
