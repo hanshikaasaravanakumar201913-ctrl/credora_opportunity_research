@@ -12,7 +12,7 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [theme, setThemeState] = useState<ThemeMode>(() => {
     const saved = localStorage.getItem('credora_theme');
-    return (saved as ThemeMode) || 'DARK';
+    return saved === 'LIGHT' ? 'LIGHT' : 'DARK';
   });
 
   const [isDark, setIsDark] = useState<boolean>(true);
@@ -24,19 +24,9 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     if (theme === 'DARK') {
       root.classList.add('dark');
       setIsDark(true);
-    } else if (theme === 'LIGHT') {
+    } else {
       root.classList.remove('dark');
       setIsDark(false);
-    } else {
-      // SYSTEM
-      const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (systemDark) {
-        root.classList.add('dark');
-        setIsDark(true);
-      } else {
-        root.classList.remove('dark');
-        setIsDark(false);
-      }
     }
   }, [theme]);
 

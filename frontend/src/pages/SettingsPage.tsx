@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAuth } from '../contexts/AuthContext.js';
 import { useTheme } from '../contexts/ThemeContext.js';
-import { Settings, Moon, Sun, Laptop, ShieldCheck, Bell, Lock, LogOut } from 'lucide-react';
+import { Settings, Moon, Sun, ShieldCheck, Bell, Lock, LogOut } from 'lucide-react';
 
 export const SettingsPage: React.FC = () => {
   const { user, logout } = useAuth();
@@ -30,11 +30,10 @@ export const SettingsPage: React.FC = () => {
             <span>Appearance & Theme</span>
           </h3>
 
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 gap-3 max-w-md">
             {[
               { id: 'DARK', label: 'Dark Mode', icon: Moon },
               { id: 'LIGHT', label: 'Light Mode', icon: Sun },
-              { id: 'SYSTEM', label: 'System Sync', icon: Laptop },
             ].map((item) => {
               const Icon = item.icon;
               const active = theme === item.id;

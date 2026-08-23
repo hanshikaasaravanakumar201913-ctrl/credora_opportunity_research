@@ -10,7 +10,6 @@ import {
   MessageSquareCode,
   Moon,
   Sun,
-  Laptop,
   User,
   LogOut,
   Menu,
@@ -35,10 +34,8 @@ export const Navbar: React.FC = () => {
     { name: 'Recommendations', path: '/recommendations', icon: Sparkles },
   ];
 
-  const cycleTheme = () => {
-    if (theme === 'DARK') setTheme('LIGHT');
-    else if (theme === 'LIGHT') setTheme('SYSTEM');
-    else setTheme('DARK');
+  const toggleTheme = () => {
+    setTheme(theme === 'DARK' ? 'LIGHT' : 'DARK');
   };
 
   return (
@@ -88,16 +85,14 @@ export const Navbar: React.FC = () => {
           <div className="hidden md:flex items-center gap-3">
             {/* Theme Toggle Button */}
             <button
-              onClick={cycleTheme}
+              onClick={toggleTheme}
               className="p-2 rounded-xl border border-[#BAA88B] dark:border-dark-border bg-[#F7EFE1] dark:bg-dark-surface text-[#0D2B1D] dark:text-[#4EA36C] hover:bg-[#D8C7AC] dark:hover:bg-dark-card transition-all shadow-sm"
-              title={`Current theme: ${theme}. Click to switch.`}
+              title={theme === 'DARK' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
             >
               {theme === 'DARK' ? (
                 <Moon className="w-4 h-4" />
-              ) : theme === 'LIGHT' ? (
-                <Sun className="w-4 h-4" />
               ) : (
-                <Laptop className="w-4 h-4" />
+                <Sun className="w-4 h-4" />
               )}
             </button>
 
@@ -187,8 +182,9 @@ export const Navbar: React.FC = () => {
           {/* Mobile Menu Trigger */}
           <div className="flex md:hidden items-center gap-2">
             <button
-              onClick={cycleTheme}
+              onClick={toggleTheme}
               className="p-1.5 rounded-lg border border-[#BAA88B] dark:border-dark-border bg-[#F7EFE1] dark:bg-dark-surface text-[#0D2B1D] dark:text-[#4EA36C]"
+              title={theme === 'DARK' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
             >
               {theme === 'DARK' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
             </button>

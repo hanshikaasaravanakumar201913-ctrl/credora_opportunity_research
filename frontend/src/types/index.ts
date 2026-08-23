@@ -5,7 +5,7 @@ export type SearchInputType = 'COMPANY_NAME' | 'WEBSITE_URL' | 'OPPORTUNITY_URL'
 export type RiskLevel = 'LOW_RISK' | 'MODERATE_RISK' | 'HIGH_RISK' | 'INSUFFICIENT_INFORMATION';
 export type VerificationStatus = 'VERIFIED' | 'POSSIBLY_OUTDATED' | 'INCOMPLETE' | 'CONFLICTING' | 'NOT_VERIFIED';
 export type ConfidenceLevel = 'HIGH' | 'MEDIUM' | 'LOW';
-export type ThemeMode = 'DARK' | 'LIGHT' | 'SYSTEM';
+export type ThemeMode = 'DARK' | 'LIGHT';
 export type SourceHierarchyType = 'PRIMARY' | 'SECONDARY' | 'USER_PROVIDED';
 
 export interface User {
