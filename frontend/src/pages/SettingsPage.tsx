@@ -30,7 +30,7 @@ export const SettingsPage: React.FC = () => {
             <span>Appearance & Theme</span>
           </h3>
 
-          <div className="grid grid-cols-2 gap-3 max-w-md">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
             {[
               { id: 'DARK', label: 'Dark Mode', icon: Moon },
               { id: 'LIGHT', label: 'Light Mode', icon: Sun },
