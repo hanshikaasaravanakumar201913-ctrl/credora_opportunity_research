@@ -59,7 +59,7 @@ export const Navbar: React.FC = () => {
             </Link>
 
             {/* Desktop Navigation Links */}
-            <nav className="hidden md:flex items-center gap-1">
+            <nav className="hidden md:flex items-center gap-1.5 ml-2">
               {navLinks.map((link) => {
                 const Icon = link.icon;
                 const active = location.pathname === link.path;
@@ -67,13 +67,13 @@ export const Navbar: React.FC = () => {
                   <Link
                     key={link.path}
                     to={link.path}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs transition-all ${
                       active
-                        ? 'bg-[#D8C7AC] dark:bg-dark-surface text-[#0D2B1D] dark:text-[#4EA36C] font-extrabold border border-[#0D2B1D]/40 dark:border-dark-border shadow-sm'
-                        : 'text-[#0A110D] dark:text-[#AFC4B2] hover:text-[#0D2B1D] dark:hover:text-[#E2EDE2] hover:bg-[#D8C7AC]/50 dark:hover:bg-dark-surface/50'
+                        ? 'bg-[#0D2B1D] text-[#F7EFE1] dark:bg-[#4EA36C] dark:text-[#0F1511] font-extrabold shadow-sm'
+                        : 'text-[#2C3E33] dark:text-[#AFC4B2] hover:text-[#0D2B1D] dark:hover:text-[#E2EDE2] font-semibold hover:bg-[#D8C7AC]/50 dark:hover:bg-dark-surface/60'
                     }`}
                   >
-                    <Icon className="w-3.5 h-3.5 text-[#0D2B1D] dark:text-[#4EA36C]" />
+                    <Icon className={`w-3.5 h-3.5 ${active ? 'text-[#F7EFE1] dark:text-[#0F1511]' : 'text-[#0D2B1D] dark:text-[#4EA36C]'}`} />
                     <span>{link.name}</span>
                   </Link>
                 );

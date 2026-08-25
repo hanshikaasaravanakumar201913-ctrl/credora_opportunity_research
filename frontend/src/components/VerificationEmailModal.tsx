@@ -7,7 +7,7 @@ interface VerificationEmailModalProps {
   isOpen: boolean;
   onClose: () => void;
   companyName: string;
-  opportunityTitle: string;
+  opportunityTitle?: string;
   recruiterName?: string;
 }
 
@@ -15,7 +15,7 @@ export const VerificationEmailModal: React.FC<VerificationEmailModalProps> = ({
   isOpen,
   onClose,
   companyName,
-  opportunityTitle,
+  opportunityTitle = 'General Application Inquiries',
   recruiterName
 }) => {
   const { user } = useAuth();

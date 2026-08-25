@@ -64,13 +64,13 @@ class ApiService {
 
   // DISCOVERY & AUTOCOMPLETE PIPELINE
   public async autocomplete(q: string) {
-    return this.request<{ query: string; candidates: DiscoveredEntityCandidate[]; totalFound: number }>(
+    return this.request<{ query: string; exactMatch?: DiscoveredEntityCandidate; candidates: DiscoveredEntityCandidate[]; similarCompanies?: DiscoveredEntityCandidate[]; totalFound: number }>(
       `/companies/search/autocomplete?q=${encodeURIComponent(q)}`
     );
   }
 
   public async searchCandidates(q: string) {
-    return this.request<{ query: string; candidates: DiscoveredEntityCandidate[]; totalFound: number }>(
+    return this.request<{ query: string; exactMatch?: DiscoveredEntityCandidate; candidates: DiscoveredEntityCandidate[]; similarCompanies?: DiscoveredEntityCandidate[]; totalFound: number }>(
       `/companies/search/candidates?q=${encodeURIComponent(q)}`
     );
   }

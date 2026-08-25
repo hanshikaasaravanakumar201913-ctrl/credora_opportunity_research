@@ -35,6 +35,10 @@ export interface CandidateProfile {
   onboardingCompleted: boolean;
 }
 
+export type IdentityConfidence = 'VERY_HIGH' | 'HIGH' | 'MODERATE' | 'LIMITED';
+export type EvidenceLevel = 'STRONG_EVIDENCE' | 'MODERATE_EVIDENCE' | 'LIMITED_EVIDENCE';
+export type MatchCategory = 'EXACT' | 'DISTINCT_ENTITY' | 'SIMILAR_COMPANY';
+
 export interface DiscoveredEntityCandidate {
   id?: string;
   name: string;
@@ -43,18 +47,39 @@ export interface DiscoveredEntityCandidate {
   officialDomain?: string;
   officialWebsite?: string;
   logoUrl?: string;
+  logoSource?: 'OFFICIAL_WEBSITE' | 'FAVICON' | 'SOCIAL_PROFILE' | 'DIRECTORY' | 'FALLBACK';
   industry?: string;
   headquarters?: string;
   country?: string;
   foundedYear?: number;
+  founders?: string[];
+  companySize?: string;
+  companyType?: string;
   description?: string;
+  linkedinUrl?: string;
+  careersUrl?: string;
   sourceCount: number;
   primarySources: string[];
+  sourcesFoundList?: string[];
   entityMatchScore: number; // 0 - 100% (likelihood this is the intended entity)
+  identityConfidence?: IdentityConfidence;
+  evidenceLevel?: EvidenceLevel;
+  matchCategory?: MatchCategory;
   matchReasoning: string;
   domainFound: boolean;
   publicRecordsFound: boolean;
   isExistingRecord?: boolean;
+  verificationLevel?: 'VERIFIED' | 'DISCOVERED' | 'POSSIBLE_MATCH' | 'UNABLE_TO_VERIFY';
+  sourceProvenance?: Record<string, { sourceName: string; sourceUrl?: string; confidence: ConfidenceLevel }>;
+  similarCompanies?: DiscoveredEntityCandidate[];
+}
+
+export interface CandidateDiscoveryResponse {
+  query: string;
+  exactMatch?: DiscoveredEntityCandidate;
+  candidates: DiscoveredEntityCandidate[];
+  similarCompanies?: DiscoveredEntityCandidate[];
+  totalFound: number;
 }
 
 export interface FactProvenance {
@@ -108,6 +133,15 @@ export interface Company {
   headquarters?: string;
   locations?: string; // JSON
   companySize?: string;
+  founders?: string[];
+  linkedinUrl?: string;
+  careersUrl?: string;
+  verificationLevel?: 'VERIFIED' | 'DISCOVERED' | 'POSSIBLE_MATCH' | 'UNABLE_TO_VERIFY';
+  identityConfidence?: IdentityConfidence;
+  evidenceLevel?: EvidenceLevel;
+  evidenceConfidenceScore?: number;
+  companyType?: string;
+  logoSource?: 'OFFICIAL_WEBSITE' | 'FAVICON' | 'SOCIAL_PROFILE' | 'DIRECTORY' | 'FALLBACK';
   registrationNumber?: string;
   registrationStatus?: string;
   businessType?: string;
